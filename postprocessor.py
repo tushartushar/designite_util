@@ -52,9 +52,9 @@ def _get_impl_smells_list(out_path):
                     is_first_line = False
                     continue
                 tokens = line.split(',')
-                if len(tokens) > 5:
+                if len(tokens) > 6:
                     smell_list.append(ImplSmell(tokens[0], tokens[1],
-                                                tokens[2], tokens[3], tokens[4], tokens[5]))
+                                                tokens[2], tokens[3], tokens[4], tokens[5], tokens[6]))
     return smell_list
 
 
@@ -67,7 +67,8 @@ def _process_impl_smells(type_list, method_list, impl_smell_list, out_path):
                        smell.project_name == item.project_name and
                        smell.package_name == item.package_name and
                        smell.type_name == item.type_name and
-                       smell.method_name == item.method_name]
+                       smell.method_name == item.method_name and
+                       smell.m_start_line_no == item.start_line_no]
             if len(methods) > 1:
                 print('overridden methods detected')
             if len(methods) == 0:

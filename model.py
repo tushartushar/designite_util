@@ -24,3 +24,20 @@ class ImplSmell:
         self.method_name = method_name
         self.smell_name = smell_name
         self.cause = cause.strip('\n')
+
+
+class DesignSmell:
+    def __init__(self, project_name, package_name, type_name, smell_name, cause):
+        self.project_name = project_name
+        self.package_name = package_name
+        self.type_name = type_name
+        self.smell_name = smell_name
+        self.cause = cause.strip('\n')
+
+
+class ArchSmell:
+    def __init__(self, project_name, package_name, smell_name, cause):
+        self.project_name = project_name
+        self.package_name = package_name
+        self.smell_name = smell_name
+        self.cause = cause.strip('\n')

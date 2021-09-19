@@ -25,6 +25,7 @@ class ImplSmell:
         self.smell_name = smell_name
         self.cause = cause.strip('\n')
         self.m_start_line_no = line_no
+        self.matched = False
 
 
 class DesignSmell:
@@ -34,6 +35,7 @@ class DesignSmell:
         self.type_name = type_name
         self.smell_name = smell_name
         self.cause = cause.strip('\n')
+        self.matched = False
 
 
 class ArchSmell:
@@ -42,3 +44,4 @@ class ArchSmell:
         self.package_name = package_name
         self.smell_name = smell_name
         self.cause = cause.strip('\n')
+        self.matched = False

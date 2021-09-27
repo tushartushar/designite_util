@@ -138,11 +138,13 @@ def process(path1, path2):
     is_same_arch, arch_not_matched_list1, arch_not_matched_list2 = diff_arch(path1, path2)
     is_same_design, design_not_matched_list1, design_not_matched_list2 = diff_design(path1, path2)
     is_same_impl, impl_not_matched_list1, impl_not_matched_list2 = diff_impl(path1, path2)
-    return is_same_arch and is_same_design and is_same_impl, arch_not_matched_list1, arch_not_matched_list2, design_not_matched_list1, design_not_matched_list2, impl_not_matched_list1, impl_not_matched_list2
+    is_same = is_same_arch and is_same_design and is_same_impl
+    print('is_same: ' + str(is_same))
+    return is_same, arch_not_matched_list1, arch_not_matched_list2, design_not_matched_list1, design_not_matched_list2, impl_not_matched_list1, impl_not_matched_list2
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
+    if len(sys.argv) > 2:
         process(sys.argv[1], sys.argv[2])
     else:
-        print('Argument error\nUsage:\ndesignite_diff <path of first output folder> <path of second output folder')
+        print('Argument error\nUsage:\ndesignite_diff <path of first output folder> <path of second output folder>')

@@ -91,7 +91,7 @@ def diff_design(path1, path2):
     print_smells(not_matched_list1, f'Different design smells: {path1}')
     not_matched_list2 = list(filter(lambda item:
                                     item.matched == False, design_smell_list2))
-    print_smells(not_matched_list2, 'Different design smells: {path2}')
+    print_smells(not_matched_list2, f'Different design smells: {path2}')
     is_same = True if len(not_matched_list1) == 0 and \
                       len(not_matched_list2) == 0 else False
     return is_same, not_matched_list1, not_matched_list2
@@ -122,7 +122,7 @@ def diff_impl(path1, path2):
     print_smells(not_matched_list1, f'Different implementation smells: {path1}')
     not_matched_list2 = list(filter(lambda item:
                                     item.matched == False, impl_smell_list2))
-    print_smells(not_matched_list2, 'Different implementation smells: {path1}')
+    print_smells(not_matched_list2, f'Different implementation smells: {path2}')
     is_same = True if len(not_matched_list1) == 0 and \
                       len(not_matched_list2) == 0 else False
     return is_same, not_matched_list1, not_matched_list2

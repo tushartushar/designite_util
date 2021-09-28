@@ -107,8 +107,9 @@ def diff_impl(path1, path2):
                                item.package_name == smell.package_name and
                                item.type_name == smell.type_name and
                                item.method_name == smell.method_name and
-                               item.cause == smell.cause and
-                               item.m_start_line_no == smell.m_start_line_no,
+                               item.cause == smell.cause,
+                               # Removing the start line no check, it seems unnecessary.
+                               # and item.m_start_line_no == smell.m_start_line_no,
                                impl_smell_list2)
         for filtered_item in filtered_list:
             if filtered_item.matched:

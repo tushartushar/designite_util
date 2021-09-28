@@ -43,6 +43,8 @@ class DesignSmell:
     def __str__(self):
         return self.project_name + ', ' + self.package_name + ', ' + self.type_name + ', ' + self.smell_name + ', ' + self.cause
 
+
+
 class ArchSmell:
     def __init__(self, project_name, package_name, smell_name, cause):
         self.project_name = project_name.strip('\n')
@@ -52,5 +54,4 @@ class ArchSmell:
         self.matched = False
 
     def __str__(self):
-        print('str arch')
         return self.project_name + ', ' + self.package_name + ', ' + self.smell_name + ', ' + self.cause

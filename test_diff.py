@@ -34,6 +34,7 @@ class Designite_diff_tests(unittest.TestCase):
         self.assertEqual(len(removed_smells), 0)
         self.assertEqual(len(modified_smells), 0)
 
+    # folder 1 has one modified (in cause) arch smell
     def test_case7(self):
         is_same, new_smells, removed_smells, modified_smells, *_ = process('test_files/case7/1', 'test_files/case7/2')
         self.assertFalse(is_same)
@@ -52,14 +53,16 @@ class Designite_diff_tests(unittest.TestCase):
 
     # folder 1 has one less design smell and folder 2 has three design smells (different) less
     def test_case4(self):
-        is_same, diff1_a, diff2_a, diff1_d, diff2_d, *_ = process('test_files/case4/1', 'test_files/case4/2')
+        is_same, a_new_smells, a_removed_smells, a_modified_smells, d_new_smells, d_removed_smells, d_modified_smells, *_ = process('test_files/case4/1', 'test_files/case4/2')
         self.assertFalse(is_same)
-        self.assertEqual(len(diff1_d), 3)
-        self.assertEqual(len(diff2_d), 1)
+        self.assertEqual(len(d_new_smells), 3)
+        self.assertEqual(len(d_removed_smells), 1)
+        self.assertEqual(len(d_modified_smells), 0)
 
     # folder 1 has one less impl smell and folder 2 has two impl smells (different) less
     def test_case5(self):
-        is_same, diff1_a, diff2_a, diff1_d, diff2_d, diff1_i, diff2_i = process('test_files/case5/1', 'test_files/case5/2')
+        is_same, a_new_smells, a_removed_smells, a_modified_smells, d_new_smells, d_removed_smells, d_modified_smells, i_new_smells, i_removed_smells, i_modified_smells= process('test_files/case5/1', 'test_files/case5/2')
         self.assertFalse(is_same)
-        self.assertEqual(len(diff1_i), 2)
-        self.assertEqual(len(diff2_i), 1)
+        self.assertEqual(len(i_new_smells), 2)
+        self.assertEqual(len(i_removed_smells), 1)
+        self.assertEqual(len(i_modified_smells), 0)

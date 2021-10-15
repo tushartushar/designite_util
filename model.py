@@ -30,6 +30,19 @@ class ImplSmell:
     def __str__(self):
         return self.project_name + ', ' + self.package_name + ', ' + self.type_name + ', ' + self.method_name + ', ' + self.smell_name + ', ' + self.cause + ', ' + self.m_start_line_no.strip('\n')
 
+    def is_smell_present(self, smell_list):
+        filtered_list = filter(lambda item:
+                               item.smell_name == self.smell_name and
+                               item.project_name == self.project_name and
+                               item.package_name == self.package_name and
+                               item.type_name == self.type_name and
+                               item.method_name == self.method_name,
+                               smell_list)
+        for item in filtered_list:
+            if not item.matched:
+                item.matched = True
+                return True
+        return False
 
 class DesignSmell:
     def __init__(self, project_name, package_name, type_name, smell_name, cause):
@@ -43,7 +56,18 @@ class DesignSmell:
     def __str__(self):
         return self.project_name + ', ' + self.package_name + ', ' + self.type_name + ', ' + self.smell_name + ', ' + self.cause
 
-
+    def is_smell_present(self, smell_list):
+        filtered_list = filter(lambda item:
+                               item.smell_name == self.smell_name and
+                               item.project_name == self.project_name and
+                               item.package_name == self.package_name and
+                               item.type_name == self.type_name,
+                               smell_list)
+        for item in filtered_list:
+            if not item.matched:
+                item.matched = True
+                return True
+        return False
 
 class ArchSmell:
     def __init__(self, project_name, package_name, smell_name, cause):
@@ -55,3 +79,15 @@ class ArchSmell:
 
     def __str__(self):
         return self.project_name + ', ' + self.package_name + ', ' + self.smell_name + ', ' + self.cause
+
+    def is_smell_present(self, smell_list):
+        filtered_list = filter(lambda item:
+                               item.smell_name == self.smell_name and
+                               item.project_name == self.project_name and
+                               item.package_name == self.package_name,
+                               smell_list)
+        for item in filtered_list:
+            if not item.matched:
+                item.matched = True
+                return True
+        return False

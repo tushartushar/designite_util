@@ -14,13 +14,29 @@ def _verify(folder_path):
         return path
     raise ValueError("The provided path does not exist: " + str(path))
 
+def common_substring_from_start(str_a, str_b):
+    """ returns the longest common substring from the beginning of str_a and str_b """
+    def _iter():
+        for a, b in zip(str_a, str_b):
+            if a == b:
+                yield a
+                if a == ':' or b == ':':
+                    return
+            else:
+                return
+    return ''.join(_iter())
+
 
 def is_cause_match(cause1, cause2, static_text=CAUSE_STATIC_TEXT):
-    cause1 = cause1.replace(static_text, '')
-    cause2 = cause2.replace(static_text, '')
+    common_str = common_substring_from_start(cause1, cause2)
+    cause1 = cause1.replace(common_str, '').rstrip('.')
+    cause2 = cause2.replace(common_str, '').rstrip('.')
     cause1_set = set([x.strip() for x in cause1.split(';')])
     cause2_set = set([x.strip() for x in cause2.split(';')])
-    if len(cause1_set.difference(cause2_set)) > 0:
+    diff1 =cause1_set.difference(cause2_set)
+    diff2 =cause2_set.difference(cause1_set)
+
+    if len(diff1) > 0 or len(diff2) > 0:
         return False
     else:
         return True
@@ -30,6 +46,40 @@ def print_smells(smell_list, msg):
     print(msg)
     for smell in smell_list:
         print('\t' + str(smell))
+
+
+def is_smell_present(target_smell, not_matched_list2):
+    filtered_list = filter(lambda item:
+                           item.smell_name == target_smell.smell_name and
+                           item.project_name == target_smell.project_name and
+                           item.package_name == target_smell.package_name,
+                           not_matched_list2)
+    for item in filtered_list:
+        if not item.matched:
+            item.matched = True
+            return True
+    return False
+
+
+# If combo of smell name, project name, and package name is present in 1 but not in 2 -> New
+# If the combo is present in 2 but not in 1 -> Removed
+#  Otherwise, it is modified
+def diff_arch_detailed(not_matched_list1, not_matched_list2, path1):
+    new_smells = list()
+    modified_smells = list()
+    for smell in not_matched_list2:
+        smell.matched = False
+    for smell in not_matched_list1:
+        is_present = is_smell_present(smell, not_matched_list2)
+        if is_present:
+            modified_smells.append(smell)
+        else:
+            new_smells.append(smell)
+    removed_smells = list(filter(lambda item: item.matched is False, not_matched_list2))
+    print_smells(new_smells, f'New architecture smells: {path1}')
+    print_smells(removed_smells, f'Removed architecture smells: {path1}')
+    print_smells(modified_smells, f'Modified architecture smells: {path1}')
+    return new_smells, removed_smells, modified_smells
 
 
 def diff_arch(path1, path2):
@@ -54,14 +104,16 @@ def diff_arch(path1, path2):
                     filtered_item.matched = True
                     break
     not_matched_list1 = list(filter(lambda item:
-                                    item.matched == False, arch_smell_list1))
-    print_smells(not_matched_list1, f'Different architecture smells: {path1}')
+                                    item.matched is False, arch_smell_list1))
+    # print_smells(not_matched_list1, f'Different architecture smells: {path1}')
     not_matched_list2 = list(filter(lambda item:
-                                    item.matched == False, arch_smell_list2))
-    print_smells(not_matched_list2, f'Different architecture smells: {path2}')
-    is_same = True if len(not_matched_list1) == 0 and \
-                      len(not_matched_list2) == 0 else False
-    return is_same, not_matched_list1, not_matched_list2
+                                    item.matched is False, arch_smell_list2))
+    # print_smells(not_matched_list2, f'Different architecture smells: {path2}')
+    new_smells, removed_smells, modified_smells = diff_arch_detailed(not_matched_list1, not_matched_list2, path1)
+    is_same = True if len(new_smells) == 0 and \
+                      len(removed_smells) == 0 and \
+        len(modified_smells) == 0 else False
+    return is_same, new_smells, removed_smells, modified_smells
 
 
 def diff_design(path1, path2):
@@ -88,10 +140,10 @@ def diff_design(path1, path2):
                     break
     not_matched_list1 = list(filter(lambda item:
                                     item.matched == False, design_smell_list1))
-    print_smells(not_matched_list1, f'Different design smells: {path1}')
+    # print_smells(not_matched_list1, f'Different design smells: {path1}')
     not_matched_list2 = list(filter(lambda item:
                                     item.matched == False, design_smell_list2))
-    print_smells(not_matched_list2, f'Different design smells: {path2}')
+    # print_smells(not_matched_list2, f'Different design smells: {path2}')
     is_same = True if len(not_matched_list1) == 0 and \
                       len(not_matched_list2) == 0 else False
     return is_same, not_matched_list1, not_matched_list2
@@ -128,6 +180,7 @@ def diff_impl(path1, path2):
                       len(not_matched_list2) == 0 else False
     return is_same, not_matched_list1, not_matched_list2
 
+
 # Accepts two folder paths (assumes that both the folders are generated by DesigniteJava)
 # Returns 1: whether both the folders are same from detected smells perspective
 # 2 and 3: list of different arch smells in folder 1 and 2 respectively
@@ -136,12 +189,12 @@ def diff_impl(path1, path2):
 def process(path1, path2):
     path1 = _verify(path1)
     path2 = _verify(path2)
-    is_same_arch, arch_not_matched_list1, arch_not_matched_list2 = diff_arch(path1, path2)
+    is_same_arch, arch_new_smells, arch_removed_smells, arch_modified_smells = diff_arch(path1, path2)
     is_same_design, design_not_matched_list1, design_not_matched_list2 = diff_design(path1, path2)
     is_same_impl, impl_not_matched_list1, impl_not_matched_list2 = diff_impl(path1, path2)
     is_same = is_same_arch and is_same_design and is_same_impl
     print('is_same: ' + str(is_same))
-    return is_same, arch_not_matched_list1, arch_not_matched_list2, design_not_matched_list1, design_not_matched_list2, impl_not_matched_list1, impl_not_matched_list2
+    return is_same, arch_new_smells, arch_removed_smells, arch_modified_smells, design_not_matched_list1, design_not_matched_list2, impl_not_matched_list1, impl_not_matched_list2
 
 
 if __name__ == '__main__':
@@ -150,8 +203,8 @@ if __name__ == '__main__':
         # since the output is symmetric anyways
         files = sys.argv[1:3]
         if sys.argv[1] > sys.argv[2]:
-            files.reverse() # i hate that these functions modify rather than return a new list
+            files.reverse()  # i hate that these functions modify rather than return a new list
 
-        process(files[0],files[1])
+        process(files[0], files[1])
     else:
         print('Argument error\nUsage:\ndesignite_diff <path of first output folder> <path of second output folder>')

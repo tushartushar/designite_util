@@ -228,12 +228,13 @@ class ArchSmell:
         else:
             # rest of the three smells differ in a metric
             m1 = re.search(r'=\s*(\d+\.\d+)', cause1)
-            no1 = float(m1.group(1))
             m2 = re.search(r'=\s*(\d+\.\d+)', cause2)
-            no2 = float(m2.group(1))
-            self.before_metric = no2
-            self.after_metric = no1
-            self.change_in_metric = round(no1 - no2, 2)
+            if m1 and m2:
+                no1 = float(m1.group(1))
+                no2 = float(m2.group(1))
+                self.before_metric = no2
+                self.after_metric = no1
+                self.change_in_metric = round(no1 - no2, 2)
 
 
 def common_substring_from_start(str_a, str_b):

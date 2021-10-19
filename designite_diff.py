@@ -60,9 +60,10 @@ def diff_detailed(not_matched_list1, not_matched_list2, smell_text):
     for smell in not_matched_list2:
         smell.matched = False
     for smell in not_matched_list1:
-        is_present = smell.is_smell_present(not_matched_list2)
+        is_present, similar_smell = smell.is_smell_present(not_matched_list2)
         if is_present:
             modified_smells.append(smell)
+            smell.populate_diff_metrics(similar_smell)
         else:
             new_smells.append(smell)
     removed_smells = list(filter(lambda item: item.matched is False, not_matched_list2))

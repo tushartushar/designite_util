@@ -227,8 +227,8 @@ class ArchSmell:
             self.change_in_metric = len(diff1) + len(diff2)
         else:
             # rest of the three smells differ in a metric
-            m1 = re.search(r'=\s*(\d+\.\d+)', cause1)
-            m2 = re.search(r'=\s*(\d+\.\d+)', cause2)
+            m1 = re.search(r'[:=]\s*(\d+\.?\d*)', self.cause)
+            m2 = re.search(r'[:=]\s*(\d+\.?\d*)', similar_smell.cause)
             if m1 and m2:
                 no1 = float(m1.group(1))
                 no2 = float(m2.group(1))

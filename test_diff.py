@@ -112,3 +112,13 @@ class Designite_diff_tests(unittest.TestCase):
         self.assertEqual(i_modified_smells[2].after_metric, 2)
         self.assertEqual(i_modified_smells[2].change_in_metric, -1)
 
+    # god component arch smell loc different
+    def test_case11(self):
+        is_same, a_new_smells, a_removed_smells, a_modified_smells, *_ = process(
+            'test_files/case11/1', 'test_files/case11/2')
+        self.assertEqual(a_modified_smells[0].before_metric, 5.38)
+        self.assertEqual(a_modified_smells[0].after_metric, 5.48)
+        self.assertEqual(a_modified_smells[0].change_in_metric, 0.1)
+        self.assertEqual(a_modified_smells[1].before_metric, 100753)
+        self.assertEqual(a_modified_smells[1].after_metric, 100750)
+        self.assertEqual(a_modified_smells[1].change_in_metric, -3)

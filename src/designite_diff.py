@@ -200,7 +200,10 @@ def diff_impl(path1, path2):
         #                        # and item.m_start_line_no == smell.m_start_line_no,
         #                        impl_smell_list2)
         key = smell.project_name + smell.package_name + smell.type_name +smell.method_name + smell.cause
-        filtered_list = impl_smells2[smell.smell_name][key] if key in impl_smells2[smell.smell_name] else list()
+        if smell.smell_name in impl_smells2:
+            filtered_list = impl_smells2[smell.smell_name][key] if key in impl_smells2[smell.smell_name] else list()
+        else:
+            filtered_list = list()
         for filtered_item in filtered_list:
             if filtered_item.matched:
                 continue
@@ -248,8 +251,8 @@ if __name__ == '__main__':
         # order the filenames so we have consistent output irrespective of the order of the parameters
         # since the output is symmetric anyways
         files = sys.argv[1:3]
-        if sys.argv[1] > sys.argv[2]:
-            files.reverse()  # i hate that these functions modify rather than return a new list
+        # if sys.argv[1] > sys.argv[2]:
+        #     files.reverse()  # i hate that these functions modify rather than return a new list
 
         process(files[0], files[1])
     else:

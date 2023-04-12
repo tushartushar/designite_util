@@ -53,12 +53,12 @@ def print_smells(smell_list, msg):
         print('\t' + str(smell))
 
 
-# If combo of smell name, project name, and package name is present in 1 but not in 2 -> New
-# If the combo is present in 2 but not in 1 -> Removed
+# If combo of smell name, project name, and package name is present in 1 but not in 2 -> Removed
+# If the combo is present in 2 but not in 1 -> New
 #  Otherwise, it is modified
 def diff_detailed(not_matched_list1, not_matched_list2, smell_text):
-    new_smells = list()
     modified_smells = list()
+    removed_smells = list()
     for smell in not_matched_list2:
         smell.matched = False
     for smell in not_matched_list1:
@@ -67,8 +67,9 @@ def diff_detailed(not_matched_list1, not_matched_list2, smell_text):
             modified_smells.append(smell)
             smell.populate_diff_metrics(similar_smell)
         else:
-            new_smells.append(smell)
-    removed_smells = list(filter(lambda item: item.matched is False, not_matched_list2))
+            # new_smells.append(smell)
+            removed_smells.append(smell)
+    new_smells = list(filter(lambda item: item.matched is False, not_matched_list2))
     print_smells(new_smells, f'New {smell_text} smells:')
     print_smells(removed_smells, f'Removed {smell_text} smells:')
     print_smells(modified_smells, f'Modified {smell_text} smells:')
@@ -198,7 +199,8 @@ def diff_impl(path1, path2):
         #                        # Removing the start line no check, it seems unnecessary.
         #                        # and item.m_start_line_no == smell.m_start_line_no,
         #                        impl_smell_list2)
-        filtered_list = impl_smells2[smell.smell_name][smell.project_name + smell.package_name + smell.type_name +smell.method_name + smell.cause] if smell.project_name + smell.package_name + smell.type_name +smell.method_name + smell.cause in impl_smells2[smell.smell_name] else list()
+        key = smell.project_name + smell.package_name + smell.type_name +smell.method_name + smell.cause
+        filtered_list = impl_smells2[smell.smell_name][key] if key in impl_smells2[smell.smell_name] else list()
         for filtered_item in filtered_list:
             if filtered_item.matched:
                 continue

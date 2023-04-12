@@ -23,16 +23,16 @@ class Designite_diff_tests(unittest.TestCase):
     def test_case2(self):
         is_same, new_smells, removed_smells, modified_smells, *_ = process('test_files/case2/1', 'test_files/case2/2')
         self.assertFalse(is_same)
-        self.assertEqual(len(new_smells), 0)
-        self.assertEqual(len(removed_smells), 1)
+        self.assertEqual(len(new_smells), 1)
+        self.assertEqual(len(removed_smells), 0)
         self.assertEqual(len(modified_smells), 0)
 
-    # folder 1 has more less arch smell
+    # folder 1 has one more arch smell
     def test_case6(self):
         is_same, new_smells, removed_smells, modified_smells, *_ = process('test_files/case6/1', 'test_files/case6/2')
         self.assertFalse(is_same)
-        self.assertEqual(len(new_smells), 1)
-        self.assertEqual(len(removed_smells), 0)
+        self.assertEqual(len(new_smells), 0)
+        self.assertEqual(len(removed_smells), 1)
         self.assertEqual(len(modified_smells), 0)
 
     # folder 1 has one modified (in cause) arch smell
@@ -56,8 +56,8 @@ class Designite_diff_tests(unittest.TestCase):
         is_same, a_new_smells, a_removed_smells, a_modified_smells, d_new_smells, d_removed_smells, d_modified_smells, *_ = process(
             'test_files/case4/1', 'test_files/case4/2')
         self.assertFalse(is_same)
-        self.assertEqual(len(d_new_smells), 3)
-        self.assertEqual(len(d_removed_smells), 1)
+        self.assertEqual(len(d_new_smells), 1)
+        self.assertEqual(len(d_removed_smells), 3)
         self.assertEqual(len(d_modified_smells), 0)
 
     # folder 1 has one less impl smell and folder 2 has two impl smells (different) less
@@ -65,8 +65,8 @@ class Designite_diff_tests(unittest.TestCase):
         is_same, a_new_smells, a_removed_smells, a_modified_smells, d_new_smells, d_removed_smells, d_modified_smells, i_new_smells, i_removed_smells, i_modified_smells = process(
             'test_files/case5/1', 'test_files/case5/2')
         self.assertFalse(is_same)
-        self.assertEqual(len(i_new_smells), 2)
-        self.assertEqual(len(i_removed_smells), 1)
+        self.assertEqual(len(i_new_smells), 1)
+        self.assertEqual(len(i_removed_smells), 2)
         self.assertEqual(len(i_modified_smells), 0)
 
     # folder 1 has two arch smells (cyclic dep and feature conc modified)

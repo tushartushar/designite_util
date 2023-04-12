@@ -4,7 +4,7 @@ import sys
 import os
 import time
 
-from postprocessor import _get_arch_smells_list, _get_design_smells_list, _get_impl_smells_list
+from src.postprocessor import _get_arch_smells_list, _get_design_smells_list, _get_impl_smells_list
 
 CAUSE_STATIC_TEXT = 'The tool detected the smell in this component because this component participates in a cyclic dependency. The participating components in the cycle are:'
 CAUSE_STATIC_TEXT_DESIGN = 'The tool detected the smell in this class because this class participates in a cyclic dependency. The participating classes in the cycle are: '

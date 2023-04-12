@@ -1,4 +1,4 @@
-from postprocessor import _get_method_list, _get_type_list, _get_impl_smells_list, _get_design_smells_list, \
+from src.postprocessor import _get_method_list, _get_type_list, _get_impl_smells_list, _get_design_smells_list, \
     _get_arch_smells_list
 
 

@@ -1,6 +1,6 @@
 import re
 
-from constants import *
+from src.constants import *
 
 
 class Type:

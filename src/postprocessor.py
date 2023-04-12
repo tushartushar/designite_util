@@ -4,7 +4,7 @@
 
 import os.path
 import sys
-from model import Type, Method, ImplSmell, DesignSmell, ArchSmell
+from src.model import Type, Method, ImplSmell, DesignSmell, ArchSmell
 
 def _get_type_list(out_path):
     type_file = os.path.join(out_path, 'TypeMetrics.csv')

@@ -120,7 +120,10 @@ def diff_arch(path1, path2):
         #                        item.project_name == smell.project_name and
         #                        item.package_name == smell.package_name,
         #                        arch_smell_list2)
-        filtered_list = arch_smells2[smell.smell_name][smell.project_name+smell.package_name] if smell.project_name+smell.package_name in arch_smells2[smell.smell_name] else list()
+        if smell.smell_name in arch_smells2:
+            filtered_list = arch_smells2[smell.smell_name][smell.project_name+smell.package_name] if smell.project_name+smell.package_name in arch_smells2[smell.smell_name] else list()
+        else:
+            filtered_list = list()
         for filtered_item in filtered_list:
             if filtered_item.matched:
                 continue
@@ -158,7 +161,10 @@ def diff_design(path1, path2):
         #                        item.package_name == smell.package_name and
         #                        item.type_name == smell.type_name,
         #                        design_smell_list2)
-        filtered_list = design_smells2[smell.smell_name][smell.project_name + smell.package_name + smell.type_name] if smell.project_name + smell.package_name + smell.type_name in design_smells2[smell.smell_name] else list()
+        if smell.smell_name in design_smells2:
+            filtered_list = design_smells2[smell.smell_name][smell.project_name + smell.package_name + smell.type_name] if smell.project_name + smell.package_name + smell.type_name in design_smells2[smell.smell_name] else list()
+        else:
+            filtered_list = list()
         for filtered_item in filtered_list:
             if filtered_item.matched:
                 continue

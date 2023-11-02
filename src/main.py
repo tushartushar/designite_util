@@ -1,5 +1,4 @@
 import typer
-print(dir())
 from src.designite_diff import process
 
 def main(oldpath: str, newpath:str, outputpath: str):

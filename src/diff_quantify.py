@@ -2,7 +2,7 @@
 # It assumes that the file names are in <project>.<commit-hash1>.<commit-hash2> format.
 import os
 import sys
-from constants import *
+from .constants import *
 
 
 def _get_smell_type(line):

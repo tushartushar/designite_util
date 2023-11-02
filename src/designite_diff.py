@@ -5,7 +5,7 @@ import os
 import time
 import tempfile
 import json
-from .postprocessor import _get_arch_smells_list, _get_design_smells_list, _get_impl_smells_list
+from src.postprocessor import _get_arch_smells_list, _get_design_smells_list, _get_impl_smells_list
 
 CAUSE_STATIC_TEXT = 'The tool detected the smell in this component because this component participates in a cyclic dependency. The participating components in the cycle are:'
 CAUSE_STATIC_TEXT_DESIGN = 'The tool detected the smell in this class because this class participates in a cyclic dependency. The participating classes in the cycle are: '
@@ -249,8 +249,8 @@ def process(path1, path2, output_path):
     is_same_impl, impl_new_smells, impl_removed_smells, impl_modified_smells = diff_impl(path1, path2)
     is_same = is_same_arch and is_same_design and is_same_impl
     
+    out_json = {}
     if not is_same:
-        out_json = {}
         if not is_same_arch and len(arch_new_smells)>0:
             out_json["architecture_smells"] = [str(arch_smell) for arch_smell in arch_new_smells]
         if not is_same_design and len(design_new_smells)>0:
@@ -258,9 +258,9 @@ def process(path1, path2, output_path):
         if not is_same_impl and len(impl_new_smells)>0:
             out_json["implementation_smell"] = [str(impl_smell) for impl_smell in impl_new_smells]
         
-        with open(output_path, "+w") as fp:
-            json.dump(out_json, fp)
-        
+    with open(output_path, "+w") as fp:
+        json.dump(out_json, fp)
+    
     print('is_same: ' + str(is_same))
     print('Elapsed time: ' + str(time.time() - start_time))
     return is_same, arch_new_smells, arch_removed_smells, arch_modified_smells, design_new_smells, design_removed_smells, \

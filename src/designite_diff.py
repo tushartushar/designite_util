@@ -3,7 +3,8 @@ import datetime
 import sys
 import os
 import time
-
+import tempfile
+import json
 from src.postprocessor import _get_arch_smells_list, _get_design_smells_list, _get_impl_smells_list
 
 CAUSE_STATIC_TEXT = 'The tool detected the smell in this component because this component participates in a cyclic dependency. The participating components in the cycle are:'
@@ -46,11 +47,12 @@ def is_cause_match(cause1, cause2, static_text=CAUSE_STATIC_TEXT):
     else:
         return True
 
-
 def print_smells(smell_list, msg):
     print(msg)
     for smell in smell_list:
         print('\t' + str(smell))
+
+
 
 
 # If combo of smell name, project name, and package name is present in 1 but not in 2 -> Removed
@@ -238,7 +240,7 @@ def time_it(msg):
 # 2 and 3: list of different arch smells in folder 1 and 2 respectively
 # 4 and 5: list of different design smells in folder 1 and 2 respectively
 # 6 and 7: list of different impl smells in folder 1 and 2 respectively
-def process(path1, path2):
+def process(path1, path2, output_path):
     path1 = _verify(path1)
     path2 = _verify(path2)
     start_time = time.time()
@@ -246,6 +248,19 @@ def process(path1, path2):
     is_same_design, design_new_smells, design_removed_smells, design_modified_smells = diff_design(path1, path2)
     is_same_impl, impl_new_smells, impl_removed_smells, impl_modified_smells = diff_impl(path1, path2)
     is_same = is_same_arch and is_same_design and is_same_impl
+    
+    out_json = {}
+    if not is_same:
+        if not is_same_arch and len(arch_new_smells)>0:
+            out_json["architecture_smells"] = [str(arch_smell) for arch_smell in arch_new_smells]
+        if not is_same_design and len(design_new_smells)>0:
+            out_json["design_smells"] = [str(design_smell) for design_smell in design_new_smells]
+        if not is_same_impl and len(impl_new_smells)>0:
+            out_json["implementation_smell"] = [str(impl_smell) for impl_smell in impl_new_smells]
+        
+    with open(output_path, "+w") as fp:
+        json.dump(out_json, fp)
+    
     print('is_same: ' + str(is_same))
     print('Elapsed time: ' + str(time.time() - start_time))
     return is_same, arch_new_smells, arch_removed_smells, arch_modified_smells, design_new_smells, design_removed_smells, \
@@ -260,6 +275,6 @@ if __name__ == '__main__':
         # if sys.argv[1] > sys.argv[2]:
         #     files.reverse()  # i hate that these functions modify rather than return a new list
 
-        process(files[0], files[1])
+        process(files[0], files[1], "output.json")
     else:
         print('Argument error\nUsage:\ndesignite_diff <path of first output folder> <path of second output folder>')

@@ -1,5 +1,5 @@
 import typer
-from src.designite_diff import process
+from designiteutil.designite_diff import process
 
 def main(oldpath: str, newpath:str, outputpath: str):
     process(oldpath, newpath, outputpath)

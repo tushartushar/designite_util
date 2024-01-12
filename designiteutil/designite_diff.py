@@ -255,7 +255,7 @@ def process(path1, path2, output_path):
         if not is_same_design and len(design_new_smells)>0:
             out_json["design_smells"] = [str(design_smell) for design_smell in design_new_smells]
         if not is_same_impl and len(impl_new_smells)>0:
-            out_json["implementation_smell"] = [str(impl_smell) for impl_smell in impl_new_smells]
+            out_json["implementation_smells"] = [str(impl_smell) for impl_smell in impl_new_smells]
         
     with open(output_path, "+w") as fp:
         json.dump(out_json, fp)

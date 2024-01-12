@@ -71,9 +71,9 @@ def diff_detailed(not_matched_list1, not_matched_list2, smell_text):
             # new_smells.append(smell)
             removed_smells.append(smell)
     new_smells = list(filter(lambda item: item.matched is False, not_matched_list2))
-    print_smells(new_smells, f'New {smell_text} smells:')
-    print_smells(removed_smells, f'Removed {smell_text} smells:')
-    print_smells(modified_smells, f'Modified {smell_text} smells:')
+    # print_smells(new_smells, f'New {smell_text} smells:')
+    # print_smells(removed_smells, f'Removed {smell_text} smells:')
+    # print_smells(modified_smells, f'Modified {smell_text} smells:')
     return new_smells, removed_smells, modified_smells
 
 

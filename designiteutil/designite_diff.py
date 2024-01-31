@@ -71,9 +71,9 @@ def diff_detailed(not_matched_list1, not_matched_list2, smell_text):
             # new_smells.append(smell)
             removed_smells.append(smell)
     new_smells = list(filter(lambda item: item.matched is False, not_matched_list2))
-    print_smells(new_smells, f'New {smell_text} smells:')
-    print_smells(removed_smells, f'Removed {smell_text} smells:')
-    print_smells(modified_smells, f'Modified {smell_text} smells:')
+    # print_smells(new_smells, f'New {smell_text} smells:')
+    # print_smells(removed_smells, f'Removed {smell_text} smells:')
+    # print_smells(modified_smells, f'Modified {smell_text} smells:')
     return new_smells, removed_smells, modified_smells
 
 
@@ -255,7 +255,7 @@ def process(path1, path2, output_path):
         if not is_same_design and len(design_new_smells)>0:
             out_json["design_smells"] = [str(design_smell) for design_smell in design_new_smells]
         if not is_same_impl and len(impl_new_smells)>0:
-            out_json["implementation_smell"] = [str(impl_smell) for impl_smell in impl_new_smells]
+            out_json["implementation_smells"] = [str(impl_smell) for impl_smell in impl_new_smells]
         
     with open(output_path, "+w") as fp:
         json.dump(out_json, fp)

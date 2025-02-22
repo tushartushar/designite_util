@@ -12,6 +12,7 @@ from designiteutil.diff_impl import DiffImplDJ, DiffImplDpy
 
 def _verify(folder_path):
     path = os.path.abspath(folder_path)
+    print(f"verifying {path} ...")
     if os.path.exists(path):
         return path
     raise ValueError("The provided path does not exist: " + str(path))
@@ -43,6 +44,10 @@ def process(path1, path2, output_path='output.json', source_tool='dj'):
     """
     path1 = _verify(path1)
     path2 = _verify(path2)
+    if not (source_tool == 'dj' or source_tool == 'dpy'):
+        raise ValueError("source_tool must be either 'dj' or 'dpy'")
+    print(f"output will be stored in file: {output_path}")
+    print(f"source tool: {source_tool}")
     start_time = time.time()
     arch_comparator, design_comparator, impl_comparator = get_comparators(source_tool)
     is_same_arch, arch_new_smells, arch_removed_smells, arch_modified_smells = arch_comparator.diff(path1, path2)

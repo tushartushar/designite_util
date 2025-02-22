@@ -187,6 +187,7 @@ def _get_impl_smells_list_dpy(out_path):
         if filename.endswith('implementation_smells.csv'):
             impl_file = os.path.join(out_path, filename)
             if os.path.exists(impl_file):
+                print('processing ' + impl_file)
                 is_first_line = True
                 with open(impl_file, 'r', encoding='utf8', errors='ignore') as file:
                     for line in file:

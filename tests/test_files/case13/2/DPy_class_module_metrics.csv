@@ -1,0 +1,5 @@
+Package,Module,Class,LOC,WMC,NOM,NOPM,NOF,NOPF,LCOM,Fan-in,Fan-out
+src,config_loader,,13,4,1,1,2,2,0,1,2
+src,__init__,,0,0,0,0,0,0,-1,0,0
+src,dpy,,124,34,13,8,2,1,0.08,6,1
+src.smells,smell_detector,,76,22,0,0,0,0,-1,1,0

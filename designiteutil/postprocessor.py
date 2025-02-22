@@ -181,6 +181,48 @@ def process(out_path):
     _process_arch_smells(type_list, arch_smell_list, out_path)
 
 
+def _get_impl_smells_list_dpy(out_path):
+    smell_list = list()
+    for filename in os.listdir(out_path):
+        if filename.endswith('implementation_smells.csv'):
+            impl_file = os.path.join(out_path, filename)
+            if os.path.exists(impl_file):
+                is_first_line = True
+                with open(impl_file, 'r', encoding='utf8', errors='ignore') as file:
+                    for line in file:
+                        if is_first_line:
+                            is_first_line = False
+                            continue
+                        tokens = line.split(',')
+                        if len(tokens) > 7:
+                            # Package	Module	Class	Smell	Function/Method	Line no	File	Details
+                            # def __init__(self, project_name, package_name, type_name, method_name, smell_name, cause, line_no):
+                            smell_list.append(ImplSmell('dpy', tokens[0], tokens[1] + '.' +
+                                                        tokens[2], tokens[4], tokens[3], tokens[7], tokens[5]))
+    return smell_list
+
+
+def _get_design_smells_list_dpy(out_path):
+    smell_list = list()
+    for filename in os.listdir(out_path):
+        if filename.endswith('design_smells.csv'):
+            design_file = os.path.join(out_path, filename)
+            if os.path.exists(design_file):
+                is_first_line = True
+                with open(design_file, 'r', encoding='utf8', errors='ignore') as file:
+                    for line in file:
+                        if is_first_line:
+                            is_first_line = False
+                            continue
+                        tokens = line.split(',')
+                        if len(tokens) > 6:
+                            smell_list.append(DesignSmell('prj', tokens[0], tokens[3],
+                                                          tokens[2], tokens[6]))
+    return smell_list
+
+
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         process(sys.argv[1])

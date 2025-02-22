@@ -2,7 +2,7 @@ import unittest
 
 import os
 
-from src.designite_diff import _verify, process
+from designiteutil.designite_diff import _verify, process
 
 
 class Designite_diff_tests(unittest.TestCase):
